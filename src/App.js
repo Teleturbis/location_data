@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Map, Marker } from 'pigeon-maps';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
 function App() {
   const [coordinates, setCoordinate] = useState([50.11552, 8.68417]);
@@ -17,6 +17,7 @@ function App() {
       .then((res) => res.json())
       .then((data) => {
         setWeather(data);
+        console.log('Wetter:', data);
       });
   }
 
@@ -57,13 +58,16 @@ function App() {
         <Marker
           key={element.id}
           width={35}
-          anchor={element.geometry.coordinates.reverse()}
+          position={element.geometry.coordinates.reverse()}
           color="rgb(255,0,0)"
           onClick={() => setClicked(element.properties.name)}
         />
       ))
     );
   }
+
+  console.log('state Coordinates:', coordinates);
+  console.log('TripAdvisor:', tripAdvisor);
 
   return (
     <div>
@@ -75,14 +79,26 @@ function App() {
       <button onClick={() => handleClick()}>Get Position</button>
       {loaded && weather && (
         <div>
-          <Map height={500} defaultCenter={coordinates} defaultZoom={13}>
-            {markers /*SEHENSWÜRDIGKEITEN*/}
-            <Marker
-              width={45}
-              anchor={coordinates}
-              color="rgb(0,0,255)" /*UNSERE POSITION*/
-            />
-          </Map>
+          <div
+            id="map"
+            style={{
+              height: '500px',
+              width: '900px',
+              zIndex: '100',
+            }}
+          >
+            <MapContainer center={[51.505, -0.09]} zoom={13}>
+              <TileLayer
+                attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              <Marker position={[51.505, -0.09]}>
+                <Popup>
+                  A pretty CSS3 popup. <br /> Easily customizable.
+                </Popup>
+              </Marker>
+            </MapContainer>
+          </div>
           <h2>Aktuelle Sehenswürdigkeit: {clicked}</h2>
           <h2>Das aktuelle Wetter in {weather.name}: </h2>
           <ul>
@@ -113,8 +129,6 @@ function App() {
     </div>
   );
 }
-
-//
 
 export default App;
 
