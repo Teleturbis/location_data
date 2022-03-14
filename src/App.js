@@ -22,7 +22,7 @@ function App() {
 
   function fetchTripAdvisor(lat, lon) {
     fetch(
-      `http://api.opentripmap.com/0.1/ru/places/radius?radius=${rad}&lon=${lon}&lat=${lat}&apikey=5ae2e3f221c38a28845f05b67f8aba5d057015d876971d0da4711da4`
+      `https://api.opentripmap.com/0.1/ru/places/radius?radius=${rad}&lon=${lon}&lat=${lat}&apikey=5ae2e3f221c38a28845f05b67f8aba5d057015d876971d0da4711da4`
     )
       .then((res) => res.json())
       .then((data) => {
